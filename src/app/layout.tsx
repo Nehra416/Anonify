@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import Navbar from "@/components/sections/Navbar";
 import { Analytics } from "@vercel/analytics/next"
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Analytics mode="production" />
+          <Toaster position="top-center" />
         </ThemeProvider>
       </body>
     </html>

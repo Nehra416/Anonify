@@ -1,10 +1,12 @@
+import { dbConnection } from "@/config/dbConfig";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
+dbConnection();
 
 export async function POST(request: NextRequest) {
     try {
-        const { secretKey } = await request.json();
+        const { secretKey }: { secretKey: string } = await request.json();
         if (!secretKey || secretKey.trim() === "") {
             return NextResponse.json({ error: "Provide the SecretKey" }, { status: 400 });
         }

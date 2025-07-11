@@ -7,7 +7,7 @@ dbConnection();
 
 export async function POST(request: NextRequest) {
     try {
-        const { username } = await request.json()
+        const { username }: { username: string } = await request.json()
         if (!username || username.trim() === "") {
             return NextResponse.json({ error: "Provide a username" }, { status: 400 });
         }
@@ -26,8 +26,9 @@ export async function POST(request: NextRequest) {
             success: true,
             slug,
             userId: newUser._id,
+            username: newUser.username,
             secretKey,
-            link: `${process.env.BASE_URL}/f/${slug}`,
+            link: `${process.env.NEXT_PUBLIC_BASE_URL}/f/${slug}`,
             message: "Link Created Successfully",
         }, { status: 201 });
 

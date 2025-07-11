@@ -1,10 +1,12 @@
+import { dbConnection } from "@/config/dbConfig";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
+dbConnection();
 
 export async function POST(request: NextRequest) {
     try {
-        const { message, slug } = await request.json()
+        const { message, slug }: { message: string; slug: string } = await request.json()
         if (!message || message.trim() === "") {
             return NextResponse.json({ error: "Provide a message" }, { status: 400 });
         }
