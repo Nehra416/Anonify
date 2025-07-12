@@ -91,7 +91,7 @@ export default function PublicFeedbackForm() {
                     <textarea
                         rows={5}
                         maxLength={200}
-                        className="w-full rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-gray-300 dark:border-neutral-800 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
+                        className="w-full rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-gray-300 dark:border-neutral-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
                         placeholder="Type your honest feedback here..."
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}

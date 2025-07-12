@@ -3,13 +3,14 @@
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Navbar() {
     const { theme, setTheme } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
-
+    const router = useRouter();
     const handleClose = () => {
         setIsClosing(true);
         setTimeout(() => {
@@ -29,6 +30,20 @@ export default function Navbar() {
 
                     {/* Desktop menu */}
                     <div className='hidden md:flex items-center gap-5'>
+                        <button
+                            onClick={() => router.push("/improve")}
+                            className="group relative p-0 cursor-pointer text-sm font-medium italic"
+                        >
+                            Feedback
+                            <span className="absolute left-1/2 bottom-0 h-0.5 w-0 bg-current transition-all duration-200 group-hover:left-0 group-hover:w-full"></span>
+                        </button>
+                        <button
+                            onClick={() => router.push("/contact")}
+                            className="group relative p-0 cursor-pointer text-sm font-medium italic"
+                        >
+                            Contact Us
+                            <span className="absolute left-1/2 bottom-0 h-0.5 w-0 bg-current transition-all duration-200 group-hover:left-0 group-hover:w-full"></span>
+                        </button>
                         <button
                             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                             className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 transition duration-150 cursor-pointer"
