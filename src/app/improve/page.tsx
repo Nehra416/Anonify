@@ -34,9 +34,9 @@ export default function FeedbackForm() {
     }
 
     return (
-        <section className="min-h-[90vh] px-6 py-16 bg-gray-100 dark:bg-neutral-900 text-center">
+        <section className="min-h-[40vh] md:min-h-[90vh] px-6 py-16 bg-gray-100 dark:bg-neutral-900 text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                Help Us Make Anonify Better 🚀
+                Help Us To Make Anonify Better 🚀
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 max-w-xl mx-auto mb-8">
                 Share missing features, suggestions, or improvements you would love to see.

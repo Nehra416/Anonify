@@ -4,13 +4,17 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 import axios from "axios"
-import { Copy, RefreshCcw, Share2, Trash2 } from "lucide-react"
+import { Copy, MoreVertical, Pin, PinOff, RefreshCcw, Share2, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 interface Feedback {
     _id: string;
     message: string;
+    pinned: boolean;
     createdAt: string;
 }
 
@@ -86,6 +90,9 @@ export default function DashboardPage() {
     }
 
     const deleteAllFeedbacks = async () => {
+        if (feedbacks.length === 0)
+            return toast.error("No feedbacks to delete")
+
         setDeletingAll(true)
         try {
             const res = await axios.post("/api/delete-all-feedback", { userId: userData.userId })
@@ -97,6 +104,20 @@ export default function DashboardPage() {
             toast.error("Failed to delete all feedbacks")
         } finally {
             setDeletingAll(false)
+        }
+    }
+
+    const pinFeedback = async (id: string, pin: boolean) => {
+        try {
+            const res = await axios.post("/api/pin-feedback", { userId: userData.userId, feedbackId: id, pin: !pin })
+            if (res.data.success) {
+                setFeedbacks(res.data.feedbacks);
+                toast.success(res.data.pin ? "Pinned to top!" : "Unpinned");
+            }
+
+        } catch (error) {
+            toast.error("Failed to pin feedback")
+            console.log(error);
         }
     }
 
@@ -140,16 +161,31 @@ export default function DashboardPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
                         <div className="flex items-center justify-center gap-3">
                             <h2 className="text-xl font-semibold">Your Feedbacks</h2>
-                            <Button
-                                variant="outline"
-                                className="p-1"
-                                onClick={() => fetchFeedbacks(userData.userId)}
-                            >
-                                <RefreshCcw className="w-4 h-4" />
-                            </Button>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <Button variant="outline" className="p-1"
+                                        onClick={() => fetchFeedbacks(userData.userId)}
+                                    >
+                                        <RefreshCcw className="w-4 h-4" />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Refresh</p>
+                                </TooltipContent>
+                            </Tooltip>
 
                         </div>
-                        {feedbacks.length > 0 && (
+                        <div className="flex items-center justify-center gap-3">
+                            <Select>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Filter" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Faviorate">Faviorate</SelectItem>
+                                    <SelectItem value="oldest">Oldest</SelectItem>
+                                    <SelectItem value="recent">Recent</SelectItem>
+                                </SelectContent>
+                            </Select>
                             <Button
                                 variant="destructive"
                                 className="hover:scale-[1.02]"
@@ -158,7 +194,7 @@ export default function DashboardPage() {
                             >
                                 {deletingAll ? <Loader2 className="w-4 h-4 animate-spin" /> : "Delete All"}
                             </Button>
-                        )}
+                        </div>
                     </div>
 
                     {loading ? (
@@ -176,18 +212,44 @@ export default function DashboardPage() {
                                     key={feed._id}
                                     className="relative bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 p-4 rounded-xl hover:shadow-md dark:shadow-white/5 transition"
                                 >
-                                    <div className="absolute top-2 right-3">
-                                        <button
-                                            onClick={() => deleteFeedback(feed._id)}
-                                            className="text-red-500 hover:text-red-700"
-                                            disabled={deletingSingle === feed._id}
-                                        >
-                                            {deletingSingle === feed._id ? (
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                            ) : (
-                                                <Trash2 className="w-4 h-4" />
-                                            )}
-                                        </button>
+                                    <div className="absolute top-2 right-2 flex items-center gap-1">
+                                        {
+                                            feed.pinned &&
+                                            <span className="text-xs font-medium italic text-green-600 dark:text-green-400">Pinned</span>
+                                        }
+                                        {/* Drop Down Menu for pin or delete a specific feedback */}
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger className="focus:outline-none">
+                                                <MoreVertical className="w-4 h-4" />
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuItem onClick={() => pinFeedback(feed._id, feed.pinned)}
+                                                    className="flex items-center gap-2"
+                                                >
+                                                    {
+                                                        feed.pinned ? (
+                                                            <PinOff className="w-4 h-4" />
+                                                        ) : (
+                                                            <Pin className="w-4 h-4" />
+                                                        )
+                                                    }
+                                                    {feed.pinned ? "Unpin" : "Pin"}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => deleteFeedback(feed._id)}
+                                                    disabled={deletingSingle === feed._id}
+                                                    className="flex items-center gap-2"
+                                                >
+                                                    {
+                                                        deletingSingle === feed._id ? (
+                                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                                        ) : (
+                                                            <Trash2 className="w-4 h-4" />
+                                                        )
+                                                    }
+                                                    Delete
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                     </div>
                                     <p className="text-sm mb-2 break-words whitespace-pre-line">{feed.message}</p>
                                     <p className="text-xs text-gray-400">

@@ -16,10 +16,13 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Invalid userId" }, { status: 404 });
         }
 
-        // Sorting the feedbacks by createdAt in descending order
+        // Sorting the feedbacks by createdAt in latest to oldest order but pinned feedbacks should be at the first place(user.pinned === true) 
         const sortedFeedbacks = user.feedbacks.sort(
-            (a: { createdAt: Date }, b: { createdAt: Date }) => b.createdAt.getTime() - a.createdAt.getTime()
-        )
+            (a: { createdAt: Date, pinned: boolean }, b: { createdAt: Date, pinned: boolean }) => {
+                if (a.pinned !== b.pinned) return Number(b.pinned) - Number(a.pinned);
+                return b.createdAt.getTime() - a.createdAt.getTime();
+            }
+        );
 
         return NextResponse.json({
             success: true,

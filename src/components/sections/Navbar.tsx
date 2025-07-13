@@ -1,10 +1,11 @@
 'use client'
 
-import { Moon, Sun, Menu, X } from 'lucide-react';
+import { Moon, Sun, Menu, X, Mail, MessageSquareText } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 export default function Navbar() {
     const { theme, setTheme } = useTheme();
@@ -44,13 +45,20 @@ export default function Navbar() {
                             Contact Us
                             <span className="absolute left-1/2 bottom-0 h-0.5 w-0 bg-current transition-all duration-200 group-hover:left-0 group-hover:w-full"></span>
                         </button>
-                        <button
-                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                            className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 transition duration-150 cursor-pointer"
-                            aria-label="Toggle Theme"
-                        >
-                            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                        </button>
+
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <button
+                                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                                    className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 transition duration-150 cursor-pointer"
+                                >
+                                    {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent className="mr-2">
+                                <p>Toggle Theme</p>
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
 
                     {/* Mobile sidebar toggle */}
@@ -79,14 +87,30 @@ export default function Navbar() {
                             <X className="h-5 w-5" />
                         </button>
 
-                        {/* Theme switch */}
-                        <button
-                            onClick={() => { setTheme(theme === "dark" ? "light" : "dark"); handleClose() }}
-                            className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-900 transition duration-150 cursor-pointer flex items-center gap-2"
-                        >
-                            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                            <span className="text-sm">Toggle Theme</span>
-                        </button>
+                        {/* Menu Items */}
+                        <div>
+                            <button
+                                onClick={() => { router.push("/improve"); handleClose() }}
+                                className="p-2 flex items-center gap-2"
+                            >
+                                <MessageSquareText className="h-5 w-5" />
+                                <span className="text-sm">Feedback</span>
+                            </button>
+                            <button
+                                onClick={() => { router.push("/contact"); handleClose() }}
+                                className="p-2 flex items-center gap-2"
+                            >
+                                <Mail className="h-5 w-5" />
+                                <span>Contact Us</span>
+                            </button>
+                            <button
+                                onClick={() => { setTheme(theme === "dark" ? "light" : "dark"); handleClose() }}
+                                className="p-2 flex items-center gap-2"
+                            >
+                                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                                <span>Toggle Theme</span>
+                            </button>
+                        </div>
 
                         {/* Copyright */}
                         <p className='text-center text-xs text-gray-500 dark:text-gray-400'>
