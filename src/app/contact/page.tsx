@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { SendHorizonal } from "lucide-react"
+import { Loader2, SendHorizonal } from "lucide-react"
 import toast from "react-hot-toast"
 import axios from "axios"
 
@@ -89,7 +89,10 @@ export default function ContactSection() {
                     className="w-full flex items-center justify-center gap-2 hover:scale-[1.01] transition"
                 >
                     {loading ? (
-                        <span className="animate-pulse">Sending...</span>
+                        <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Sending...
+                        </>
                     ) : (
                         <>
                             <SendHorizonal className="w-4 h-4" />

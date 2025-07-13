@@ -64,7 +64,7 @@ export default function CreatePage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 rounded-lg bg-black dark:bg-white text-white dark:text-black flex justify-center font-medium hover:opacity-90 transition disabled:opacity-60"
+                        className="group w-full py-3 rounded-lg bg-black dark:bg-white text-white dark:text-black flex justify-center font-medium hover:opacity-90 transition disabled:opacity-60"
                     >
                         {
                             loading ?
@@ -74,7 +74,7 @@ export default function CreatePage() {
                                 </span>
                                 :
                                 <span className="flex items-center gap-2">
-                                    <Link className="w-5 h-5 " />
+                                    <Link className="w-5 h-5 group-hover:rotate-180 transition-all duration-200" />
                                     Generate My Link
                                 </span>
                         }
