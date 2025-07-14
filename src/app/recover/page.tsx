@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import axios, { AxiosError } from 'axios';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '@/context/authContext';
 
 export default function RecoverPage() {
     const [key, setKey] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
+    const { setIsLoggedIn, setUserData } = useAuth();
 
     const handleRecover = async () => {
         if (!key.trim())
@@ -26,10 +28,19 @@ export default function RecoverPage() {
                 localStorage.setItem('secretKey', key);
                 localStorage.setItem('username', res.data.username);
 
+                // update the global user data
+                setUserData({
+                    userId: res.data.userId,
+                    username: res.data.username,
+                    slug: res.data.slug,
+                    secretKey: key,
+                });
+                setIsLoggedIn(true);
+
                 // redirect to dashboard after show the success message
                 toast.success('Dashboard recovered successfully');
                 router.push('/me');
-            } 
+            }
 
         } catch (error: unknown) {
             if (error instanceof AxiosError) {

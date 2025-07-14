@@ -3,18 +3,11 @@
 import { useRouter } from "next/navigation"
 import { Button } from "../ui/button"
 import { LayoutDashboard, Link } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useAuth } from "@/context/authContext"
 
 export default function Hero() {
     const router = useRouter()
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    useEffect(() => {
-        const userId = localStorage.getItem("userId");
-        if (userId) {
-            setIsLoggedIn(true);
-        }
-    }, []);
+    const { isLoggedIn } = useAuth();
 
     return (
         <section className="md:min-h-[95vh] min-h-[90vh] md:-mt-5 -mt-16 flex flex-col justify-center items-center text-center px-4">

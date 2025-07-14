@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useAuth } from "@/context/authContext"
 
 interface Feedback {
     _id: string;
@@ -18,42 +19,26 @@ interface Feedback {
     createdAt: string;
 }
 
-interface UserData {
-    username: string
-    slug: string
-    secretKey: string
-    userId: string
-}
-
 export default function DashboardPage() {
     const router = useRouter()
-    const [userData, setUserData] = useState<UserData>({
-        username: "",
-        slug: "",
-        secretKey: "",
-        userId: ""
-    })
+    const { userData, isInitialized } = useAuth();
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
     const [loading, setLoading] = useState(true)
     const [deletingAll, setDeletingAll] = useState(false)
     const [deletingSingle, setDeletingSingle] = useState<string | null>(null)
 
     useEffect(() => {
-        const slug = localStorage.getItem("slug") || ""
-        const secretKey = localStorage.getItem("secretKey") || ""
-        const userId = localStorage.getItem("userId") || ""
-        const username = localStorage.getItem("username") || ""
+        // Wait unitil the userData is initialized or loaded from local storage
+        if (!isInitialized) return;
 
-        if (!slug || !secretKey || !userId || !username) {
+        if (!userData.slug || !userData.secretKey || !userData.userId || !userData.username) {
             toast.error("Session expired. Please recover your account.")
             router.replace("/recover")
             return
         }
 
-        setUserData({ username, slug, secretKey, userId })
-
-        fetchFeedbacks(userId)
-    }, [router])
+        fetchFeedbacks(userData.userId)
+    }, [isInitialized, userData])
 
     const fetchFeedbacks = async (userId: string) => {
         try {
@@ -126,7 +111,7 @@ export default function DashboardPage() {
             <div className="max-w-5xl mx-auto w-full flex flex-col gap-6">
                 {/* Heading */}
                 <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-black via-gray-700 to-black dark:from-white dark:via-neutral-400 dark:to-white">
+                    <h1 className="text-2xl sm:text-3xl font-bold dark:text-white text-black ">
                         Welcome back, {userData.username}
                     </h1>
 
@@ -160,7 +145,7 @@ export default function DashboardPage() {
                 <section className="mt-10">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
                         <div className="flex items-center justify-center gap-3">
-                            <h2 className="text-xl font-semibold">Your Feedbacks</h2>
+                            <h2 className="text-xl font-semibold">Your Feedbacks ({feedbacks.length})</h2>
                             <Tooltip>
                                 <TooltipTrigger>
                                     <Button variant="outline" className="p-1 group"

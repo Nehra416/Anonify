@@ -6,6 +6,7 @@ import Navbar from "@/components/sections/Navbar";
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "react-hot-toast";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { AuthProvider } from "@/context/authContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,13 +33,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider defaultTheme="system" attribute={"class"} enableSystem>
-          <Navbar />
-          {children}
-          <Analytics mode="production" />
-          <SpeedInsights />
-          <Toaster position="top-center" />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider defaultTheme="system" attribute={"class"} enableSystem>
+            <Navbar />
+            {children}
+            <Analytics mode="production" />
+            <SpeedInsights />
+            <Toaster position="top-center" />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

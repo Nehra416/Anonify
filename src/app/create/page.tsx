@@ -6,30 +6,42 @@ import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 import axios from "axios"
 import { Link, Loader2 } from "lucide-react"
+import { useAuth } from "@/context/authContext"
 
 export default function CreatePage() {
-    const [username, setUsername] = useState("")
+    const [inputValue, setInputValue] = useState("")
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const { setIsLoggedIn, setUserData } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!username.trim())
+        if (!inputValue.trim())
             return toast.error("Please enter a name");
-        if (username.length < 3 || username.length > 20)
+        if (inputValue.length < 3 || inputValue.length > 20)
             return toast.error("Name must be btw 3 to 20 char");
 
         try {
             setLoading(true);
-            const res = await axios.post("/api/create-link", { username })
+            const res = await axios.post("/api/create-link", { username: inputValue })
 
             if (!res.data.success)
                 return toast.error(res.data.error || "Something went wrong")
 
+            // set the user data in local storage
             localStorage.setItem("userId", res.data.userId)
             localStorage.setItem("username", res.data.username)
             localStorage.setItem("slug", res.data.slug)
             localStorage.setItem("secretKey", res.data.secretKey)
+
+            // update the global user data
+            setUserData({
+                userId: res.data.userId,
+                username: res.data.username,
+                slug: res.data.slug,
+                secretKey: res.data.secretKey,
+            });
+            setIsLoggedIn(true);
 
             router.push("/feedback");
         } catch (error) {
@@ -56,8 +68,8 @@ export default function CreatePage() {
                     <input
                         type="text"
                         placeholder="Enter your name or username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
                         className="px-5 py-3 rounded-lg bg-white dark:bg-neutral-900 border border-gray-300 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition"
                     />
 

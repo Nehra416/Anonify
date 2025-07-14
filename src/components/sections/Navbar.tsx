@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+import { useAuth } from '@/context/authContext';
 
 export default function Navbar() {
     const { theme, setTheme } = useTheme();
@@ -21,6 +22,7 @@ export default function Navbar() {
         }, 300); // same duration as of global CSS animation for sidebar
     };
 
+    const { isLoggedIn } = useAuth();
     return (
         <>
             <nav className="sticky top-0 z-50 w-full bg-white/70 dark:bg-black/40 backdrop-blur-md shadow-md dark:shadow-gray-700/50">
@@ -32,14 +34,18 @@ export default function Navbar() {
 
                     {/* Desktop menu */}
                     <div className='hidden md:flex items-center gap-5'>
-                        <button onClick={() => router.push("/me")}
-                            className="group relative p-0 cursor-pointer text-sm font-medium italic"
-                        >
-                            Dashboard
-                            <span className={`absolute bottom-0 h-0.5 bg-current 
+                        {
+                            isLoggedIn && (
+                                <button onClick={() => router.push("/me")}
+                                    className="group relative p-0 cursor-pointer text-sm font-medium italic"
+                                >
+                                    Dashboard
+                                    <span className={`absolute bottom-0 h-0.5 bg-current 
                                 ${path === "/me" ? "left-0 w-full"
-                                    : "left-1/2 w-0 transition-all duration-200 group-hover:left-0 group-hover:w-full"}`}></span>
-                        </button>
+                                            : "left-1/2 w-0 transition-all duration-200 group-hover:left-0 group-hover:w-full"}`}></span>
+                                </button>
+                            )
+                        }
                         <button
                             onClick={() => router.push("/improve")}
                             className="group relative p-0 cursor-pointer text-sm font-medium italic"
@@ -102,13 +108,17 @@ export default function Navbar() {
 
                         {/* Menu Items */}
                         <div className='flex flex-col gap-2 text-lg font-medium'>
-                            <button
-                                onClick={() => { router.push("/me"); handleClose() }}
-                                className="p-2 flex items-center gap-2"
-                            >
-                                <LayoutDashboard className="h-6 w-6" />
-                                <span>DashBoard</span>
-                            </button>
+                            {
+                                isLoggedIn && (
+                                    <button
+                                        onClick={() => { router.push("/me"); handleClose() }}
+                                        className="p-2 flex items-center gap-2"
+                                    >
+                                        <LayoutDashboard className="h-6 w-6" />
+                                        <span>DashBoard</span>
+                                    </button>
+                                )
+                            }
                             <button
                                 onClick={() => { router.push("/improve"); handleClose() }}
                                 className="p-2 flex items-center gap-2"
