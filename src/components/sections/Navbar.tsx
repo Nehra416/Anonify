@@ -1,9 +1,9 @@
 'use client'
 
-import { Moon, Sun, Menu, X, Mail, MessageSquareText } from 'lucide-react';
+import { Moon, Sun, Menu, X, Mail, MessageSquareText, LayoutDashboard } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
@@ -11,6 +11,7 @@ export default function Navbar() {
     const { theme, setTheme } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
+    const path = usePathname();
     const router = useRouter();
     const handleClose = () => {
         setIsClosing(true);
@@ -31,19 +32,31 @@ export default function Navbar() {
 
                     {/* Desktop menu */}
                     <div className='hidden md:flex items-center gap-5'>
+                        <button onClick={() => router.push("/me")}
+                            className="group relative p-0 cursor-pointer text-sm font-medium italic"
+                        >
+                            Dashboard
+                            <span className={`absolute bottom-0 h-0.5 bg-current 
+                                ${path === "/me" ? "left-0 w-full"
+                                    : "left-1/2 w-0 transition-all duration-200 group-hover:left-0 group-hover:w-full"}`}></span>
+                        </button>
                         <button
                             onClick={() => router.push("/improve")}
                             className="group relative p-0 cursor-pointer text-sm font-medium italic"
                         >
                             Feedback
-                            <span className="absolute left-1/2 bottom-0 h-0.5 w-0 bg-current transition-all duration-200 group-hover:left-0 group-hover:w-full"></span>
+                            <span className={`absolute bottom-0 h-0.5 bg-current 
+                                ${path === "/improve" ? "left-0 w-full"
+                                    : "left-1/2 w-0 transition-all duration-200 group-hover:left-0 group-hover:w-full"}`}></span>
                         </button>
                         <button
                             onClick={() => router.push("/contact")}
                             className="group relative p-0 cursor-pointer text-sm font-medium italic"
                         >
                             Contact Us
-                            <span className="absolute left-1/2 bottom-0 h-0.5 w-0 bg-current transition-all duration-200 group-hover:left-0 group-hover:w-full"></span>
+                            <span className={`absolute bottom-0 h-0.5 bg-current
+                                 ${path === "/contact" ? "left-0 w-full"
+                                    : "left-1/2 w-0 transition-all duration-200 group-hover:left-0 group-hover:w-full"}`}></span>
                         </button>
 
                         <Tooltip>
@@ -67,7 +80,7 @@ export default function Navbar() {
                         className="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition"
                         aria-label="Toggle Menu"
                     >
-                        {menuOpen && !isClosing ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                        {menuOpen && !isClosing ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                     </button>
                 </div>
             </nav>
@@ -84,30 +97,37 @@ export default function Navbar() {
                             className="self-end p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-900"
                             aria-label="Close Menu"
                         >
-                            <X className="h-5 w-5" />
+                            <X className="h-6 w-6" />
                         </button>
 
                         {/* Menu Items */}
-                        <div>
+                        <div className='flex flex-col gap-2 text-lg font-medium'>
+                            <button
+                                onClick={() => { router.push("/me"); handleClose() }}
+                                className="p-2 flex items-center gap-2"
+                            >
+                                <LayoutDashboard className="h-6 w-6" />
+                                <span>DashBoard</span>
+                            </button>
                             <button
                                 onClick={() => { router.push("/improve"); handleClose() }}
                                 className="p-2 flex items-center gap-2"
                             >
-                                <MessageSquareText className="h-5 w-5" />
-                                <span className="text-sm">Feedback</span>
+                                <MessageSquareText className="h-6 w-6" />
+                                <span>Feedback</span>
                             </button>
                             <button
                                 onClick={() => { router.push("/contact"); handleClose() }}
                                 className="p-2 flex items-center gap-2"
                             >
-                                <Mail className="h-5 w-5" />
+                                <Mail className="h-6 w-6" />
                                 <span>Contact Us</span>
                             </button>
                             <button
                                 onClick={() => { setTheme(theme === "dark" ? "light" : "dark"); handleClose() }}
                                 className="p-2 flex items-center gap-2"
                             >
-                                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                                {theme === "dark" ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
                                 <span>Toggle Theme</span>
                             </button>
                         </div>

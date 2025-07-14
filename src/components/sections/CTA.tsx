@@ -15,7 +15,7 @@ export default function CTA() {
         }
     }, []);
     return (
-        <section className="pt-16 pb-10 text-center px-4">
+        <section className="pt-16 pb-14 text-center px-4">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
                 Start Receiving Anonymous Feedback
             </h3>

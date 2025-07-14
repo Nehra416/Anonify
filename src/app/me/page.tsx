@@ -150,7 +150,7 @@ export default function DashboardPage() {
                                 {link}
                             </p>
                         </div>
-                        <Button onClick={() => copy(link, "Link")} className="flex items-center gap-2 hover:scale-[1.02] transition-transform">
+                        <Button onClick={() => copy(link, "Link")} className="flex items-center gap-2 ">
                             <Share2 className="w-4 h-4" /> Copy Link
                         </Button>
                     </div>
@@ -163,10 +163,10 @@ export default function DashboardPage() {
                             <h2 className="text-xl font-semibold">Your Feedbacks</h2>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <Button variant="outline" className="p-1"
+                                    <Button variant="outline" className="p-1 group"
                                         onClick={() => fetchFeedbacks(userData.userId)}
                                     >
-                                        <RefreshCcw className="w-4 h-4" />
+                                        <RefreshCcw className="w-4 h-4 group-hover:rotate-180 transition-all duration-300" />
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
