@@ -2,9 +2,9 @@ import { dbConnection } from "@/config/dbConfig"
 import User from "@/models/userModel"
 import { NextRequest, NextResponse } from "next/server"
 
-dbConnection()
 
 export async function POST(request: NextRequest) {
+    dbConnection();
     try {
         const { slug }: { slug: string } = await request.json()
 

@@ -3,9 +3,9 @@ import User from "@/models/userModel"
 import { NextRequest, NextResponse } from "next/server"
 import mongoose from "mongoose"
 
-dbConnection()
 
 export async function POST(request: NextRequest) {
+    dbConnection();
     try {
         const { userId, feedbackId }: { userId: string; feedbackId: string } = await request.json()
 

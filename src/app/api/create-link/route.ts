@@ -3,9 +3,9 @@ import User from "@/models/userModel";
 import { nanoid } from "nanoid";
 import { NextRequest, NextResponse } from "next/server";
 
-dbConnection();
 
 export async function POST(request: NextRequest) {
+    dbConnection();
     try {
         const { username }: { username: string } = await request.json()
         if (!username || username.trim() === "") {
