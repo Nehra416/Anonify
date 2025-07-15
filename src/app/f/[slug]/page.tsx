@@ -8,14 +8,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const user = await fetchUserBySlug(slug);
 
     return {
-        title: `${user.name}'s Anonymous Feedback – Anonify`,
-        description: `Leave anonymous feedback for ${user.name}`,
+        title: `${user.name} – Anonymous Feedback | Anonify`,
+        description: `Send anonymous feedback to ${user.name} securely and easily.`,
         openGraph: {
-            title: `${user.name} | Anonify`,
+            title: `${user.name} – Feedback | Anonify`,
             url: `https://anonify.chat/f/${slug}`,
         },
         twitter: {
-            title: `${user.name}'s Feedback | Anonify`,
+            title: `${user.name} – Anonymous Feedback | Anonify`,
         },
     };
 }
