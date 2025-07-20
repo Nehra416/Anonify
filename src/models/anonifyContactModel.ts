@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const contactSchema = new mongoose.Schema({
+const anonifyContactSchema = new mongoose.Schema({
     name: {
         type: String,
     },
@@ -21,5 +21,5 @@ const contactSchema = new mongoose.Schema({
 })
 
 
-const Contact = mongoose.models.contacts || mongoose.model("contacts", contactSchema);
-export default Contact;
+const AnonifyContact = mongoose.models.anonifyContact || mongoose.model("anonifyContact", anonifyContactSchema);
+export default AnonifyContact;

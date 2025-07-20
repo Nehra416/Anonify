@@ -1,5 +1,5 @@
 import { dbConnection } from "@/config/dbConfig";
-import User from "@/models/userModel";
+import Feedback from "@/models/feedbackModel";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -11,22 +11,12 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "UserId is not found" }, { status: 400 });
         }
 
-        const user = await User.findById(userId).select("feedbacks");
-        if (!user) {
-            return NextResponse.json({ error: "Invalid userId" }, { status: 404 });
-        }
-
-        // Sorting the feedbacks by createdAt in latest to oldest order but pinned feedbacks should be at the first place(user.pinned === true) 
-        const sortedFeedbacks = user.feedbacks.sort(
-            (a: { createdAt: Date, pinned: boolean }, b: { createdAt: Date, pinned: boolean }) => {
-                if (a.pinned !== b.pinned) return Number(b.pinned) - Number(a.pinned);
-                return b.createdAt.getTime() - a.createdAt.getTime();
-            }
-        );
+        // Sorting the feedbacks by pinned(true -> false) and createdAt(latest to oldest). pinned feedbacks on the first place/priority
+        const sortedFeedbacks = await Feedback.find({ userId }).sort({ pinned: -1, createdAt: -1 });
 
         return NextResponse.json({
             success: true,
-            feedbacks: sortedFeedbacks,
+            feedbacks: sortedFeedbacks || [],
             message: "All Feedbacks Fetched!",
         }, { status: 200 });
 
@@ -37,5 +27,4 @@ export async function POST(request: NextRequest) {
             { status: 500 }
         )
     }
-
 }

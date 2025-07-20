@@ -1,4 +1,5 @@
 import { dbConnection } from "@/config/dbConfig"
+import Feedback from "@/models/feedbackModel"
 import User from "@/models/userModel"
 import { NextRequest, NextResponse } from "next/server"
 import mongoose from "mongoose"
@@ -17,16 +18,16 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Invalid ID format" }, { status: 400 })
         }
 
-        const user = await User.findById(userId)
-        if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 })
+        // Delete the feedback of the user
+        const feedback = await Feedback.deleteOne({ _id: feedbackId, userId })
+
+        // If feedback not found, return error response
+        if (!feedback) {
+            return NextResponse.json({ error: "Feedback not found" }, { status: 404 })
         }
 
-        user.feedbacks = user.feedbacks.filter(
-            (f: { _id: string }) => f._id.toString() !== feedbackId
-        )
-
-        await user.save()
+        // Decrease the total feedback of the user
+        await User.updateOne({ _id: userId }, { $inc: { totalFeedback: -1 } })
 
         return NextResponse.json({ success: true, message: "Deleted" })
     } catch (error) {

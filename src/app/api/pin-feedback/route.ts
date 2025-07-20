@@ -1,5 +1,5 @@
 import { dbConnection } from "@/config/dbConfig";
-import User from "@/models/userModel";
+import Feedback from "@/models/feedbackModel";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -13,35 +13,27 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Missing or invalid parameters" }, { status: 400 });
         }
 
-        // Get the user from userId
-        const user = await User.findById(userId);
-        if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 });
-        }
-
         // Get the exact feedback object from the user's feedback array to update pin status by feedbackId
-        const feedback = user.feedbacks.id(feedbackId);
+        const feedback = await Feedback.findOne({ _id: feedbackId, userId });
         if (!feedback) {
-            return NextResponse.json({ error: "Feedback not found for pin" }, { status: 404 });
+            return NextResponse.json({ error: "Feedback not found" }, { status: 404 });
         }
 
         // Update the pin status of the feedback
         feedback.pinned = pin;
-        await user.save();
+        await feedback.save();
 
-        // Sorting the feedbacks by createdAt in latest to oldest order but pinned feedbacks should be at the first place(user.pinned === true)
-        const sortedFeedbacks = user.feedbacks.sort((a: { createdAt: Date, pinned: boolean }, b: { createdAt: Date, pinned: boolean }) => {
-            if (a.pinned !== b.pinned) return Number(b.pinned) - Number(a.pinned);
-            return b.createdAt.getTime() - a.createdAt.getTime();
-        });
+        // Sorting the feedbacks by pinned(true -> false) and createdAt(latest to oldest). pinned feedbacks on the first place/priority
+        const sortedFeedbacks = await Feedback.find({ userId }).sort({ pinned: -1, createdAt: -1 });
 
         return NextResponse.json({
             success: true,
             pin,
-            feedbacks: sortedFeedbacks
-        });
+            feedbacks: sortedFeedbacks || [],
+            message: "Feedback Pinned Successfully",
+        }, { status: 200 });
     } catch (error) {
         console.error("Pin Feedback Error:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

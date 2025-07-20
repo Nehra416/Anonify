@@ -1,5 +1,5 @@
 import { dbConnection } from "@/config/dbConfig";
-import Contact from "@/models/contactModel";
+import AnonifyContact from "@/models/anonifyContactModel";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
         if (name) dataToSave.name = name
         if (email) dataToSave.email = email
 
-        await Contact.create(dataToSave)
+        await AnonifyContact.create(dataToSave)
 
         return NextResponse.json({
             success: true,

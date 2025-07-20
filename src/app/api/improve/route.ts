@@ -1,5 +1,5 @@
 import { dbConnection } from "@/config/dbConfig";
-import Feedback from "@/models/feedbackModel";
+import AnonifyFeedback from "@/models/anonifyFeedbackModel";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
         if (page) dataToSave.page = page
         if (userId) dataToSave.userId = userId
 
-        await Feedback.create(dataToSave);
+        await AnonifyFeedback.create(dataToSave);
 
         return NextResponse.json({
             success: true,

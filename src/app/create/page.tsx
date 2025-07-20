@@ -20,6 +20,9 @@ export default function CreatePage() {
             return toast.error("Please enter a name");
         if (inputValue.length < 3 || inputValue.length > 20)
             return toast.error("Name must be btw 3 to 20 char");
+        // Check special characters and whitespace in the username
+        if (/[^a-zA-Z0-9]/.test(inputValue))
+            return toast.error("No special Char and whitespace");
 
         try {
             setLoading(true);

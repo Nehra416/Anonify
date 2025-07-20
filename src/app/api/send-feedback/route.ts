@@ -1,4 +1,5 @@
 import { dbConnection } from "@/config/dbConfig";
+import Feedback from "@/models/feedbackModel";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,23 +16,23 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Provide Slug" }, { status: 400 });
         }
 
+        // Get the user from the slug
         const user = await User.findOne({ slug });
         if (!user) {
             return NextResponse.json({ error: "Invalid link" }, { status: 400 });
         }
 
-        await User.findOneAndUpdate({ slug }, {
-            $push: {
-                feedbacks: {
-                    message: message.trim()
-                },
-            },
-        })
+        // Create the new feedback
+        await Feedback.create({ message: message.trim(), userId: user._id })
+
+        // Increase the total number of feedback of the user
+        user.totalFeedback += 1;
+        await user.save();
 
         return NextResponse.json({
             success: true,
             message: "Feedback Submitted!",
-        }, { status: 200 });
+        }, { status: 201 });
 
     } catch (error) {
         console.error("Error in Sending feedback:", error)

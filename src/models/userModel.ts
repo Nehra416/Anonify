@@ -15,24 +15,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    feedbacks: {
-        type: [
-            {
-                message: {
-                    type: String,
-                    required: true
-                },
-                pinned: {
-                    type: Boolean,
-                    default: false
-                },
-                createdAt: {
-                    type: Date,
-                    default: Date.now,
-                }
-            }
-        ],
-        default: [],
+    totalFeedback: {
+        type: Number,
+        default: 0
     }
 
 });
