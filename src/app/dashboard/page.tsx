@@ -130,6 +130,8 @@ export default function DashboardPage() {
         }
     }
 
+    if (!isInitialized || !userData.userId) return;
+
     return (
         <main className="min-h-[90vh] w-full px-4 sm:px-6 md:px-10 py-10 bg-slate-50 dark:bg-neutral-950 text-black dark:text-white">
             <div className="max-w-5xl mx-auto w-full flex flex-col gap-6">

@@ -20,8 +20,8 @@ export default function Hero() {
             </p >
             {
                 isLoggedIn ?
-                    <Button onClick={() => router.push("/me")} className="group px-6 py-4 text-lg rounded-xl shadow-md">
-                        <span className="group-hover:rotate-180 transition-all duration-200"><LayoutDashboard className="w-5 h-5" /></span>
+                    <Button onClick={() => router.push("/dashboard")} className="group px-6 py-4 text-lg rounded-xl shadow-md">
+                        <span className="group-hover:rotate-90 transition-all duration-200"><LayoutDashboard className="w-5 h-5" /></span>
                         Go to Dashboard
                     </Button>
                     :

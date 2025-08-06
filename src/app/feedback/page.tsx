@@ -80,7 +80,7 @@ export default function FeedbackSuccessPage() {
 
                 {/* Dashboard Btn */}
                 <button
-                    onClick={() => router.push("/me")}
+                    onClick={() => router.push("/dashboard")}
                     className="mt-8 w-full sm:w-auto px-6 py-3 flex items-center justify-center gap-2 rounded-xl bg-black dark:bg-white text-white dark:text-black font-semibold transition hover:opacity-90"
                 >
                     View Dashboard <ArrowRight className="w-4 h-4" />

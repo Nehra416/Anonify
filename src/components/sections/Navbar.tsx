@@ -36,12 +36,12 @@ export default function Navbar() {
                     <div className='hidden md:flex items-center gap-5'>
                         {
                             isLoggedIn && (
-                                <button onClick={() => router.push("/me")}
+                                <button onClick={() => router.push("/dashboard")}
                                     className="group relative p-0 cursor-pointer text-sm font-medium italic"
                                 >
                                     Dashboard
                                     <span className={`absolute bottom-0 h-0.5 bg-current 
-                                ${path === "/me" ? "left-0 w-full"
+                                ${path === "/dashboard" ? "left-0 w-full"
                                             : "left-1/2 w-0 transition-all duration-200 group-hover:left-0 group-hover:w-full"}`}></span>
                                 </button>
                             )
@@ -111,7 +111,7 @@ export default function Navbar() {
                             {
                                 isLoggedIn && (
                                     <button
-                                        onClick={() => { router.push("/me"); handleClose() }}
+                                        onClick={() => { router.push("/dashboard"); handleClose() }}
                                         className="p-2 flex items-center gap-2"
                                     >
                                         <LayoutDashboard className="h-6 w-6" />

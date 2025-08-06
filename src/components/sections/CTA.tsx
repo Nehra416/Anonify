@@ -24,8 +24,8 @@ export default function CTA() {
             </p>
             {
                 isLoggedIn ?
-                    <Button onClick={() => router.push("/me")} className="group px-6 py-3 text-lg rounded-xl shadow">
-                        <span className="group-hover:rotate-180 transition-all duration-200"><LayoutDashboard className="w-4 h-4" /></span>
+                    <Button onClick={() => router.push("/dashboard")} className="group px-6 py-3 text-lg rounded-xl shadow">
+                        <span className="group-hover:rotate-90 transition-all duration-200"><LayoutDashboard className="w-4 h-4" /></span>
                         Dashboard
                     </Button>
                     :

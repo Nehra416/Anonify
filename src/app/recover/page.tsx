@@ -39,7 +39,7 @@ export default function RecoverPage() {
 
                 // redirect to dashboard after show the success message
                 toast.success('Dashboard recovered successfully');
-                router.push('/me');
+                router.push('/dashboard');
             }
 
         } catch (error: unknown) {
